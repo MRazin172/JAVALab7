@@ -1,0 +1,73 @@
+import java.util.*;
+
+class Customer {
+     String customerId;
+     String name;
+
+    public Customer(String customerId, String name) {
+        this.customerId = customerId;
+        this.name = name;
+    }
+
+}
+
+class pro {
+     String productId;
+     String name;
+
+    public pro(String productId, String name) {
+        this.productId = productId;
+        this.name = name;
+    }
+
+}
+
+class Order {
+    private int orderId;
+    private Customer customer;
+    private List<Product> products;
+
+    public Order(int orderId, Customer customer) {
+        this.orderId = orderId;
+        this.customer = customer;
+        this.products = new ArrayList<>();
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+}
+
+public class AmazonCRMSystem {
+    public static void main(String[] args) {
+        List<Customer> customers = new ArrayList<>();
+        Map<String, Product> productMap = new HashMap<>();
+        Map<Customer, Set<Product>> customerProductMap = new HashMap<>();
+        TreeSet<Customer> sortedCustomers = new TreeSet<>(); // Using TreeSet for ordered sorting
+
+        Customer customer1 = new Customer("C001", "John Doe");
+        customers.add(customer1);
+
+        Product product1 = new Product("P001", "Product 1");
+        Product product2 = new Product("P002", "Product 2");
+        productMap.put("P001", product1);
+        productMap.put("P002", product2);
+
+        Order order1 = new Order(1, customer1);
+        order1.addProduct(product1);
+        order1.addProduct(product2);
+
+        customerProductMap.computeIfAbsent(customer1, k -> new HashSet<>()).add(product1);
+        customerProductMap.computeIfAbsent(customer1, k -> new HashSet<>()).add(product2);
+
+        sortedCustomers.addAll(customers);
+
+
+        Customer someCustomer = customers.get(0);
+        Set<Product> productsForCustomer = customerProductMap.getOrDefault(someCustomer, new HashSet<>());
+        for (Product product : productsForCustomer) {
+            System.out.println(product.getName());
+        }
+    }
+}
